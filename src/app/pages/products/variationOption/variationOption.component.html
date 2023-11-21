@@ -1,0 +1,185 @@
+<app-breadcrumbs title="Variation Option" [breadcrumbItems]="breadCrumbItems"></app-breadcrumbs>
+
+<div class="row">
+  <div class="col-xxl-3">
+      <div class="card">
+          <div class="card-header">
+              <h6 class="card-title mb-0" id="addCategoryLabel">Create Variation Option</h6>
+          </div>
+          <div class="card-body">
+              <form [formGroup]="variationForm" class="needs-validation createCategory-form" id="createCategory-form" novalidate>
+                  <input type="hidden" id="categoryid-input" class="form-control" formControlName="id">
+                  <div class="row">
+                      <div class="col-xxl-12 col-lg-6">
+                          <div class="mb-3">
+                              <label for="nameSelect" class="form-label">Variation<span class="text-danger">*</span></label>
+                              <select class="form-control" formControlName="name" name="nameSelect" id="categorySelect">
+                                <option value="">Select Category</option>
+                                <option *ngFor="let variation of VariationList" [value]="variation.id">{{ variation.name }}</option>
+                              </select>
+                              <div class="error-msg mt-n3">Please select a category.</div>
+                          </div>
+                      </div>
+                      <div class="col-xxl-12 col-lg-6">
+                          <div class="mb-3">
+                              <label for="SubcategoryTitle" class="form-label">Value <span class="text-danger">*</span></label>
+                              <input type="text" class="form-control" id="SubcategoryTitle" placeholder="Enter title" formControlName="value" required>
+                              <div class="invalid-feedback">Please enter a variation value.</div>
+                          </div>
+                      </div>
+                      <div class="col-lg-12">
+                          <div class="text-end">
+                              <button type="button" (click)="saveVariation()" id="addNewCategory" class="btn btn-success">Save Variation</button>
+                          </div>
+                      </div>
+                  </div>
+              </form>
+          </div>
+      </div>
+  </div>
+    <div class="col-xxl-9">
+        <div class="row justify-content-between mb-4">
+            <div class="col-xxl-3 col-lg-6">
+                <div class="search-box mb-3 mb-lg-0">
+                    <input type="text" class="form-control" id="searchResultList" autocomplete="off"[(ngModel)]="searchTerm"
+                        placeholder="Search Variation..."
+                        (input)="filterVariations()">
+                    <i class="ri-search-line search-icon"></i>
+                </div>
+            </div><!--end col-->
+           ><!--end col-->
+        </div><!--end row-->
+
+        <div *ngIf="filteredVariations.length > 0">
+          <div class="card">
+              <div class="card-body">
+                  <div id="product-sub-categories" class="table-card"></div>
+
+                  <div class="table-responsive table-card">
+                      <p-table [value]="filteredVariations" #dt [paginator]="true" [rows]="10"
+                          [globalFilterFields]="['name']" (onPage)="onPageChange($event)" styleClass="table">
+                          <ng-template pTemplate="header">
+                              <tr>
+                                  <th scope="col">ID</th>
+                                  <th scope="col">variation name</th>
+                                  <th scope="col">value</th>
+                                  <th scope="col">Action</th>
+                              </tr>
+                          </ng-template>
+                          <ng-template pTemplate="body" let-data let-index="rowIndex">
+                              <tr>
+                                  <td scope="row">#{{data.id}}</td>
+                                  <td>{{data.variation.name}}</td>
+                                  <td>{{data.value}}</td>
+                                  <td>
+                                      <ul class="hstack gap-2 list-unstyled mb-0">
+                                          <li>
+                                              <a href="javascript:void(0);" class="badge bg-success-subtle text-success"
+                                                  (click)="editData(index)">Edit</a>
+                                          </li>
+                                          <li>
+                                              <a href="javascript:void(0);" data-bs-toggle="modal"
+                                                  class="badge bg-danger-subtle text-danger" (click)="showDialog(data.id)">Delete</a>
+                                          </li>
+                                      </ul>
+                                  </td>
+                              </tr>
+                          </ng-template>
+                          <ng-template pTemplate="paginatorleft" let-state>
+                              <div class="flex-shrink-0">
+                                  <div class="text-muted">
+                                      Showing {{first}} - {{endIndex}} of {{filteredVariations.length}} results
+                                  </div>
+                              </div>
+                          </ng-template>
+                          <ng-template pTemplate="emptymessage">
+                              <tr>
+                                  <td colspan="12" class="text-center">No matching records found</td>
+                              </tr>
+                          </ng-template>
+                      </p-table>
+                  </div>
+              </div>
+          </div>
+      </div>
+
+      <div *ngIf="filteredVariations.length === 0">
+        <div class="card">
+          <div class="card-body">
+              <div id="product-sub-categories" class="table-card"></div>
+
+              <div class="table-responsive table-card">
+                  <p-table [value]="filteredVariations" #dt [paginator]="true" [rows]="10"
+                      [globalFilterFields]="['name']" (onPage)="onPageChange($event)" styleClass="table">
+                      <ng-template pTemplate="header">
+                          <tr>
+                              <th scope="col">ID</th>
+                              <th scope="col">variation name</th>
+                              <th scope="col">value</th>
+                              <th scope="col">Action</th>
+                          </tr>
+                      </ng-template>
+                      <ng-template pTemplate="body" let-data let-index="rowIndex">
+                          <tr>
+                              <td scope="row">#{{data.id}}</td>
+                              <td>{{data.variation.name}}</td>
+                              <td>{{data.value}}</td>
+                              <td>
+                                  <ul class="hstack gap-2 list-unstyled mb-0">
+                                      <li>
+                                          <a href="javascript:void(0);" class="badge bg-success-subtle text-success"
+                                              (click)="editData(index)">Edit</a>
+                                      </li>
+                                      <li>
+                                          <a href="javascript:void(0);" data-bs-toggle="modal"
+                                              class="badge bg-danger-subtle text-danger" (click)="showDialog(data.id)">Delete</a>
+                                      </li>
+                                  </ul>
+                              </td>
+                          </tr>
+                      </ng-template>
+                      <ng-template pTemplate="paginatorleft" let-state>
+                          <div class="flex-shrink-0">
+                              <div class="text-muted">
+                                  Showing {{first}} - {{endIndex}} of {{filteredVariations.length}} results
+                              </div>
+                          </div>
+                      </ng-template>
+                      <ng-template pTemplate="emptymessage">
+                          <tr>
+                              <td colspan="12" class="text-center">No matching records found</td>
+                          </tr>
+                      </ng-template>
+                  </p-table>
+              </div>
+          </div>
+      </div>
+          </div>
+
+
+    </div><!--end col-->
+</div>
+<!--end row-->
+
+
+<!-- deleteModal -->
+<p-dialog [(visible)]="display" [modal]="true" class="modal-dialog modal-dialog-centered" [draggable]="false">
+    <ng-template pTemplate="body">
+        <div class="text-center">
+            <div class="text-danger">
+                <i class="bi bi-trash display-4"></i>
+            </div>
+            <div class="mt-4 fs-15">
+                <h4 class="mb-1">Are you sure ?</h4>
+                <p class="text-muted mx-4 mb-0">Are you sure you want to remove this product item ?</p>
+            </div>
+        </div>
+        <div class="d-flex gap-2 justify-content-center mt-4 mb-2">
+            <button type="button" class="btn w-sm btn-light btn-hover" (click)="display = false" id="deleteRecord-close"
+                data-bs-dismiss="modal">Close</button>
+            <button type="button" class="btn w-sm btn-danger btn-hover" (click)="deleteRecord()">Yes, Delete
+                It!</button>
+        </div>
+    </ng-template>
+</p-dialog>
+<!-- end modal -->
