@@ -7,6 +7,7 @@ import { ProductListComponent } from './product-list/product-list.component';
 import { ProductOverviewComponent } from './product-overview/product-overview.component';
 import {  VariationComponent } from './variation/variation.component';
 import { VariationOptionComponent } from './variationOption/variationOption.component';
+import { PromotionsComponent } from './promotions/PromotionsComponent';
 
 const routes: Routes = [
   {
@@ -36,6 +37,10 @@ const routes: Routes = [
   {
   path: 'variation-option',
   component: VariationOptionComponent
+},
+{
+path: 'promotion',
+component: PromotionsComponent
 },
 ];
 

@@ -30,6 +30,12 @@ import { ProductCreateComponent } from './product-create/product-create.componen
 import { CategoriesComponent } from './categories/categories.component';
 import {  VariationComponent } from './variation/variation.component';
 import { VariationOptionComponent } from './variationOption/variationOption.component';
+import { NgxDropzoneModule } from 'ngx-dropzone';
+import { UpdateProductItemComponent } from './update-product-item/update-product-item.component';
+import { MatButtonModule } from '@angular/material/button';
+import {MatIconModule} from '@angular/material/icon';
+import{MatFormFieldModule}from '@angular/material/form-field';
+import { MatDialogModule } from '@angular/material/dialog';
 
 @NgModule({
   declarations: [
@@ -39,9 +45,15 @@ import { VariationOptionComponent } from './variationOption/variationOption.comp
     ProductCreateComponent,
     CategoriesComponent,
     VariationComponent,
-    VariationOptionComponent
+    VariationOptionComponent,
+    UpdateProductItemComponent
   ],
   imports: [
+    MatButtonModule,
+    MatIconModule,
+    MatFormFieldModule,
+    MatDialogModule,
+    NgxDropzoneModule,
     CommonModule,
     SharedModule,
     ProductsRoutingModule,
@@ -60,7 +72,8 @@ import { VariationOptionComponent } from './variationOption/variationOption.comp
     EditorModule,
     PaginatorModule,
     SlickCarouselModule,
-    TooltipModule
+    TooltipModule,
+    ReactiveFormsModule
 
   ]
 })

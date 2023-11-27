@@ -96,10 +96,6 @@ getAllCategories() {
     this.display = false;
 
   }
-  // File Upload
-
-
-
 
 
   // Edit Data
@@ -125,10 +121,17 @@ getAllCategories() {
 
   updateCategory(categoryId: number, updatedCategory: any): void {
     const formData = new FormData();
-    formData.append('name', updatedCategory.name);
-    formData.append('description', updatedCategory.description);
-    formData.append('newImage', updatedCategory.image);
+    if (updatedCategory.name !== null) {
+      formData.append('name', updatedCategory.name);
+    }
 
+    if (updatedCategory.description !== null) {
+      formData.append('description', updatedCategory.description);
+    }
+
+    if (updatedCategory.image != null) {
+      formData.append('newImage', updatedCategory.image);
+    }
     this.categoryService.updateCategory(categoryId, formData).subscribe({
       next: (response) => {
         console.log('Category updated successfully:', response);

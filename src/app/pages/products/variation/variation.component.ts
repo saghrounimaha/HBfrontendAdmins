@@ -74,9 +74,9 @@ getAllVariations() {
 editData(index: any) {
 
   var modelTitle = document.getElementById('addCategoryLabel') as HTMLAreaElement;
-  modelTitle.innerHTML = 'Edit Variation';
+  modelTitle.innerHTML = 'Create Variation';
   var updateBtn = document.getElementById('addNewCategory') as HTMLAreaElement;
-  updateBtn.innerHTML = 'Save Variation';
+  updateBtn.innerHTML = 'Create Variation';
 
   const selectedVariation = this.Variations[index]; // Assuming Variations is an array of variations
   this.variationForm.controls['id'].setValue(selectedVariation.id);
@@ -105,6 +105,7 @@ createVariation(variation: any): void {
   this.variationService.createVariation(variation).subscribe({
     next: (createdVariation: any) => {
       console.log('Variation created:', createdVariation);
+      this.variationForm.reset();
       this.getAllVariations();
     },
     error: (error) => {
@@ -117,6 +118,7 @@ updateVariation(id: number, updatedVariation: Variation): void {
   this.variationService.updateVariation(id, updatedVariation).subscribe({
     next: (response: any) => {
       console.log('Variation updated:', response);
+      this.variationForm.reset();
       this.getAllVariations()
     },
     error: (error) => {

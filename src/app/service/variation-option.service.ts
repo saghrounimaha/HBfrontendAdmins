@@ -34,6 +34,9 @@ export class VariationOptionService {
     const url = `${this.baseUrl}/api/variations/search?name=${searchQuery}`;
     return this.http.get(url);
   }
-
+  getAllVaritionOptionbyVariation(id:number){
+    const API_URL = `${this.baseUrl}/api/variation-options/variation/${id}`
+    return this.http.get(API_URL);
+  }
 
 }

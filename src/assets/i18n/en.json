@@ -21,7 +21,8 @@
         "CREATEPRODUCT": "Create Product",
         "CATEGORIES": "Categories",
         "SUBCATEGORIES": "Variation",
-        "VARIATIONOPTION":"Variation Option"
+        "VARIATIONOPTION":"Variation Option",
+        "PROMOTION":"promotion"
       }
     },
     "ORDERS": {

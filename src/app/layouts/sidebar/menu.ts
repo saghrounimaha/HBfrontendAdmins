@@ -63,6 +63,12 @@ export const MENU: MenuItem[] = [
         parentId: 3,
         link: '/products/variation-option',
       },
+      {
+        id: 12,
+        label: 'MENUITEMS.PRODUCTS.LIST.PROMOTION',
+        parentId: 3,
+        link: '/products/promotion',
+      },
     ]
   },
   {
