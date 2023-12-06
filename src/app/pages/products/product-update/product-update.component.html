@@ -1,0 +1,586 @@
+<app-breadcrumbs
+  title="Create Product"
+  [breadcrumbItems]="breadCrumbItems"
+></app-breadcrumbs>
+
+<form id="createproduct-form" class="was-validaed" [formGroup]="productForm">
+  <div class="row">
+    <div class="col-xl-9 col-lg-8">
+      <div class="card">
+        <div class="card-header">
+          <div class="d-flex">
+            <div class="flex-shrink-0 me-3">
+              <div class="avatar-sm">
+                <div
+                  class="avatar-title rounded-circle bg-light text-primary fs-20"
+                >
+                  <i class="bi bi-box-seam"></i>
+                </div>
+              </div>
+            </div>
+            <div class="flex-grow-1">
+              <h5 class="card-title mb-1">Product Information</h5>
+              <p class="text-muted mb-0">Fill all information below.</p>
+            </div>
+          </div>
+        </div>
+        <div class="card-body">
+          <div class="mb-3">
+            <label class="form-label" for="product-title-input"
+              >Product title</label
+            >
+            <input
+              type="hidden"
+              class="form-control"
+              id="formAction"
+              name="formAction"
+              value="add"
+            />
+            <input
+              type="text"
+              class="form-control"
+              id="product-title-input"
+              value=""
+              formControlName="name"
+              placeholder="Enter product title"
+              required
+            />
+            <div class="invalid-feedback">Example invalid feedback text</div>
+          </div>
+
+          <div class="mb-3">
+            <label class="form-label">Product description</label>
+
+            <p-editor
+              [(ngModel)]="text"
+              [style]="{ height: '210px' }"
+              formControlName="description"
+            >
+              <p>
+                Tommy Hilfiger men striped pink sweatshirt. Crafted with cotton.
+                Material composition is 100% organic cotton. This is one of the
+                world’s leading designer lifestyle brands and is internationally
+                recognized for celebrating the essence of classic American cool
+                style, featuring preppy with a twist designs.
+              </p>
+              <ul>
+                <li>Full Sleeve</li>
+                <li>Cotton</li>
+                <li>All Sizes available</li>
+                <li>4 Different Color</li>
+              </ul>
+            </p-editor>
+          </div>
+
+          <div>
+            <div class="row">
+              <div class="col-lg-6">
+                <div class="col-lg-6">
+                  <div class="flex-grow-1">
+                    <label class="form-label">Product category</label>
+                  </div>
+                </div>
+                <select
+                  class="form-select"
+                  id="choices-category-input"
+                  name="choices-category-input"
+                  formControlName="category"
+                >
+                  <option value="">Select product category</option>
+                  <option
+                    *ngFor="let cat of categories"
+                    [value]="cat.id_category"
+                  >
+                    {{ cat.name }}
+                  </option>
+                </select>
+              </div>
+              <div class="col-lg-6">
+                <div class="col-lg-6">
+                  <div class="flex-grow-1">
+                    <label class="form-label">Product promotion</label>
+                  </div>
+                </div>
+                <select
+                  class="form-select"
+                  id="choices-category-input"
+                  name="choices-category-input"
+                  formControlName="promotion"
+                >
+                  <option value="">Select product promotion</option>
+                  <option
+                    *ngFor="let promotion of promotionList"
+                    [value]="promotion.id_promotion"
+                  >
+                    {{ promotion.name }}-{{ promotion.discount }}%
+                  </option>
+                </select>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div class="card">
+        <div class="card-header">
+          <h5 class="card-title mb-0">Product Short Description</h5>
+        </div>
+        <div class="card-body">
+          <p class="text-muted mb-2">Add short description for product</p>
+          <textarea
+            class="form-control"
+            placeholder="Must enter minimum of a 100 characters"
+            formControlName="shortDescription"
+            rows="3"
+          ></textarea>
+        </div>
+        <!-- end card body -->
+      </div>
+      <!-- end card -->
+
+      <!-- end card -->
+
+      <div class="card">
+        <div class="card-header">
+          <div class="d-flex">
+            <div class="flex-shrink-0 me-3">
+              <div class="avatar-sm">
+                <div
+                  class="avatar-title rounded-circle bg-light text-primary fs-20"
+                >
+                  <i class="bi bi-list-ul"></i>
+                </div>
+              </div>
+            </div>
+            <div class="flex-grow-1">
+              <h5 class="card-title mb-1">General Information</h5>
+              <p class="text-muted mb-0">Fill all information below.</p>
+            </div>
+          </div>
+        </div>
+        <div class="card-body">
+          <div class="row">
+            <div class="col-lg-3 col-sm-6">
+              <div class="mb-3">
+                <label class="form-label" for="product-price-input"
+                  >Price</label
+                >
+                <div class="input-group has-validation mb-3">
+                  <span class="input-group-text" id="product-price-addon"
+                    >$</span
+                  >
+                  <input
+                    type="text"
+                    class="form-control"
+                    id="product-price-input"
+                    placeholder="Enter price"
+                    aria-label="Price"
+                    aria-describedby="product-price-addon"
+                    formControlName="price"
+                    required
+                  />
+                  <div class="invalid-feedback">
+                    Please enter a product price.
+                  </div>
+                </div>
+              </div>
+            </div>
+            <div class="col-lg-3 col-sm-6">
+              <div class="mb-3">
+                <label class="form-label" for="stocks-input">Stocks</label>
+                <input
+                  type="text"
+                  class="form-control"
+                  id="stocks-input"
+                  placeholder="Stocks"
+                  formControlName="quantityInStock"
+                  required
+                />
+                <div class="invalid-feedback">
+                  Please enter a product stocks.
+                </div>
+              </div>
+            </div>
+
+            <div class="col-lg-3 col-sm-6">
+              <div class="mb-3">
+                <label class="form-label" for="manufacturer-brand-input"
+                  >sku</label
+                >
+                <input
+                  type="text"
+                  class="form-control"
+                  id="manufacturer-brand-input"
+                  placeholder="Enter sku"
+                  formControlName="sku"
+                  required
+                />
+              </div>
+            </div>
+            <div class="col-lg-3 col-sm-6">
+              <div class="mb-3">
+                <label class="form-label" for="Quantity-input"
+                  >Date Production</label
+                >
+                <input
+                  type="date"
+                  class="form-control"
+                  formControlName="dateProduction"
+                  id="exampleInputdate"
+                />
+                <div class="invalid-feedback">Please enter a date.</div>
+              </div>
+            </div>
+          </div>
+          <!-- end row -->
+        </div>
+      </div>
+      <div class="text-end mb-3">
+        <button
+          type="submit"
+          (click)="updateProduct()"
+          class="btn btn-success w-sm"
+        >
+          update
+        </button>
+      </div>
+      <div class="card">
+        <div class="card-header">
+          <div class="d-flex">
+            <div class="flex-shrink-0 me-3">
+              <div class="avatar-sm">
+                <div
+                  class="avatar-title rounded-circle bg-light text-primary fs-20"
+                >
+                  <i class="bi bi-images"></i>
+                </div>
+              </div>
+            </div>
+            <div class="flex-grow-1">
+              <h5 class="card-title mb-1">Product Gallery</h5>
+              <p class="text-muted mb-0">Add product gallery images.</p>
+            </div>
+          </div>
+        </div>
+        <div class="card-body">
+          <div class="row align-items-center mb-2">
+            <div class="col-lg-auto ms-auto col-sm-3">
+              <button
+                data-bs-target="javascript:void(0);"
+                data-bs-toggle="modal"
+                (click)="showBasicDialog()"
+                class="btn btn-success w-100"
+              >
+                <i class="bi bi-plus-circle me-1 align-middle"></i> Add Image
+              </button>
+
+              <p-dialog
+                header="Header"
+                [modal]="true"
+                [(visible)]="displayPosition"
+                [style]="{ width: '25vw' }"
+                class="modal-dialog modal-dialog-centered"
+              >
+                <ng-template pTemplate="header">
+                  <h5 class="modal-title fs-18">Update New Image</h5>
+                </ng-template>
+                <ng-template pTemplate="body">
+                  <form
+                    autocomplete="off"
+                    novalidate
+                    class="create-form"
+                    (ngSubmit)="updateImage()"
+                  >
+                    <div
+                      id="alert-error-msg"
+                      class="d-none alert alert-danger py-2"
+                    ></div>
+
+                    <div class="row">
+                      <div class="col-lg-12">
+                        <div class="text-center mb-3">
+                          <div class="position-relative d-inline-block">
+                            <div
+                              class="position-absolute top-100 start-100 translate-middle"
+                            >
+                              <label
+                                for="brandLogo-image-input"
+                                class="mb-0"
+                                data-bs-toggle="tooltip"
+                                data-bs-placement="right"
+                                title="Select company logo"
+                              >
+                                <span class="avatar-xs d-inline-block">
+                                  <span
+                                    class="avatar-title bg-light border rounded-circle text-muted cursor-pointer"
+                                  >
+                                    <i class="ri-image-fill"></i>
+                                  </span>
+                                </span>
+                              </label>
+                              <input
+                                class="form-control d-none"
+                                id="brandLogo-image-input"
+                                type="file"
+                                accept="image/png, image/gif, image/jpeg"
+                                (change)="fileChange($event)"
+                                multiple
+                              />
+                            </div>
+                            <div class="avatar-lg">
+                              <div class="avatar-title bg-light rounded-3">
+                                <img
+                                  src="#"
+                                  alt=""
+                                  id="brandLogo-img"
+                                  class="avatar-md h-auto rounded-3 object-fit-cover"
+                                />
+                              </div>
+                            </div>
+                          </div>
+                        </div>
+                      </div>
+
+                      <div class="col-lg-12">
+                        <div class="hstack gap-2 justify-content-end">
+                          <button
+                            type="button"
+                            class="btn btn-ghost-danger"
+                            (click)="displayPosition = false"
+                            data-bs-dismiss="modal"
+                          >
+                            <i class="ri-close-line align-bottom me-1"></i>
+                            Close
+                          </button>
+                          <button
+                            type="submit"
+                            id="addNew"
+                            class="btn btn-primary"
+                          >
+                            update Image
+                          </button>
+                        </div>
+                      </div>
+                    </div>
+                  </form>
+                </ng-template>
+              </p-dialog>
+            </div>
+            <!--end col-->
+          </div>
+
+          <div class="row" id="brand-list">
+            <p-dataView
+              #dv
+              [value]="loadedImages"            >
+              <ng-template let-data pTemplate="listItem" let-index="rowIndex">
+                <div class="col-lg-3">
+                  <div class="card brand-widget card-animate me-3">
+                    <div class="card-body text-center pb-2">
+                      <img [src]="data.url" alt="" class="brand-img" />
+                    </div>
+                  </div>
+                </div>
+              </ng-template>
+            </p-dataView>
+          </div>
+        </div>
+      </div>
+
+      <div class="card">
+        <div class="card-header">
+          <div class="d-flex">
+            <div class="flex-shrink-0 me-3">
+              <div class="avatar-sm">
+                <div
+                  class="avatar-title rounded-circle bg-light text-primary fs-20"
+                >
+                  <i class="bi bi-basket"></i>
+                </div>
+              </div>
+            </div>
+            <div class="flex-grow-1">
+              <h5 class="card-title mb-1">Variations</h5>
+              <p class="text-muted mb-0">add Variation Product.</p>
+            </div>
+          </div>
+        </div>
+        <div class="card-body">
+          <div class="card-body">
+            <p-table
+              [value]="productItems"
+              [tableStyle]="{ 'min-width': '40rem' }"
+            >
+              <ng-template pTemplate="header">
+                <tr>
+                  <th scope="col">options</th>
+                  <th scope="col">sku</th>
+                  <th scope="col">price</th>
+                  <th scope="col">Quantity</th>
+                  <th scope="col">Action</th>
+                </tr>
+              </ng-template>
+              <ng-template pTemplate="body" let-item>
+                <tr>
+                  <td>{{ item.options }}</td>
+                  <td>{{ item.sku }}</td>
+                  <td>{{ item.price }}</td>
+                  <td>{{ item.quantityInStock }}</td>
+                  <td>
+                    <ul class="hstack gap-2 list-unstyled mb-0">
+                      <li>
+                        <a
+                          class="badge bg-primary-subtle text-primary edit-item-btn"
+                          href="javascript:void(0);"
+                          data-bs-toggle="modal"
+                          (click)="editProductItem(item)"
+                          >Edit</a
+                        >
+                      </li>
+                      <li>
+                        <a
+                          href="javascript:void(0);"
+                          data-bs-toggle="modal"
+                          class="badge bg-danger-subtle text-danger remove-item-btn"
+                          (click)="showDialog(item.id)"
+                          >Delete</a
+                        >
+                      </li>
+                    </ul>
+                  </td>
+                </tr>
+              </ng-template>
+            </p-table>
+          </div>
+        </div>
+        <!-- end row -->
+      </div>
+
+      <!-- end card -->
+    </div>
+  </div>
+</form>
+
+<p-dialog
+  header="Header"
+  [modal]="true"
+  [(visible)]="editableModel"
+  [style]="{ width: '800px' }"
+  class="modal-dialog modal-dialog-centered"
+>
+  <ng-template pTemplate="header" class="modal-header px-4 pt-4">
+    <h5 class="modal-title fs-18" id="exampleModalLabel">Edit Variation</h5>
+  </ng-template>
+  <ng-template pTemplate="content">
+    <form
+      class="tablelist-form"
+      novalidate
+      autocomplete="off"
+      (ngSubmit)="updateProductItem()"
+      [formGroup]="productItemForm"
+    >
+      <div class="row">
+        <div id="alert-error-msg" class="d-none alert alert-danger py-2"></div>
+        <div class="col-lg-12">
+          <div class="mb-3">
+            <label for="Title" class="form-label">price</label>
+            <input
+              type="text"
+              formControlName="price"
+              required
+              autofocus
+              class="form-control"
+              id="Title-field"
+              placeholder=" title"
+            />
+          </div>
+        </div>
+        <div class="col-lg-6">
+          <div class="mb-3">
+            <label for="sku" class="form-label">SKU</label>
+            <input
+              type="text"
+              class="form-control"
+              formControlName="sku"
+              id="sku-field"
+              data-provider="flatpickr"
+              placeholder="Sku"
+              required
+            />
+          </div>
+        </div>
+        <div class="col-lg-6">
+          <div class="mb-3">
+            <label for="quantity" class="form-label">Quantity</label>
+            <input
+              type="text"
+              class="form-control"
+              formControlName="quantity"
+              id="quantity"
+              data-provider="flatpickr"
+              placeholder="Quantity"
+              required
+            />
+          </div>
+        </div>
+
+        <div class="col-lg-12 modal-footer">
+          <div class="hstack gap-2 justify-content-end">
+            <button
+              type="button"
+              class="btn btn-ghost-danger"
+              data-bs-dismiss="modal"
+            >
+              <i
+                class="ri-close-line align-bottom me-1"
+                (click)="editableModel = false"
+              ></i>
+              Close
+            </button>
+            <button type="submit" class="btn btn-primary" id="add-btn">
+              Update Variation
+            </button>
+          </div>
+        </div>
+      </div>
+    </form>
+  </ng-template>
+</p-dialog>
+
+<p-dialog
+  [(visible)]="display"
+  class="modal-dialog modal-dialog-centered p-5"
+  [draggable]="false"
+  [modal]="true"
+>
+  <ng-template pTemplate="body">
+    <div class="text-center">
+      <div class="text-danger">
+        <i class="bi bi-trash display-4"></i>
+      </div>
+      <div class="mt-4 fs-15">
+        <h4 class="mb-1">Are you sure ?</h4>
+        <p class="text-muted mx-4 mb-0">
+          Are you sure you want to remove this coupons ?
+        </p>
+      </div>
+    </div>
+    <div class="d-flex gap-2 justify-content-center mt-4 mb-2">
+      <button
+        type="button"
+        class="btn w-sm btn-light btn-hover"
+        (click)="display = false"
+        id="deleteRecord-close"
+        data-bs-dismiss="modal"
+      >
+        Close
+      </button>
+      <button
+        type="button"
+        class="btn w-sm btn-danger btn-hover"
+        (click)="deleteRecord()"
+      >
+        Yes, Delete It!
+      </button>
+    </div>
+  </ng-template>
+</p-dialog>

@@ -1,6 +1,8 @@
 import { Component } from '@angular/core';
+import { CategoryserviceService } from 'src/app/service/categoryservice.service';
+import { ProductService } from 'src/app/service/productservice.service';
+import { DataView } from 'primeng/dataview';
 
-import { productlist } from '../product-list/data';
 
 @Component({
   selector: 'app-product-grid',
@@ -17,12 +19,25 @@ export class ProductGridComponent {
   rangeValues: number[] = [0, 2000];
   range1: any;
   range2: any;
-
+  productlist:any[]=[]
+  filter:any[]=[]
   sortOptions: any;
   sortOrder: any;
   sortField: any;
+  categories: any[]= [];
+  sortDirection: 'asc' | 'desc' = 'asc';
+  removeIds: any;
+  display!: boolean;
+
+
+
+  constructor(private productService:ProductService,private categoryService:CategoryserviceService){}
 
   ngOnInit(): void {
+    this.getAllProduct()
+    this.getAllCategories()
+    this.filterByPriceRange();
+
     /**
      * BreadCrumb
      */
@@ -32,17 +47,13 @@ export class ProductGridComponent {
     ];
 
     // Fetch Data
-    this.products = productlist
+    this.products = this.productlist
 
     this.range1 = '$ ' + this.rangeValues[0]
     this.range2 = '$ ' + this.rangeValues[1]
   }
 
-  // Range Slider
-  handleChange(e: any) {
-    this.range1 = '$ ' + e.values[0]
-    this.range2 = '$ ' + e.values[1]
-  }
+
 
   // Pagination
   onPageChange(event: any) {
@@ -57,6 +68,20 @@ export class ProductGridComponent {
     }
   }
 
+
+  getAllProduct() {
+    return this.productService.getAllProduct().subscribe({
+      next: (response: any) => {
+        this.productlist =this.filter= response;
+
+        console.log('Promotion fetched successfully:', response);
+      },
+      error: (error) => {
+        console.error('Error fetching promotion:', error);
+      },
+    });
+  }
+
   // Sorting
   onSortChange(event: any) {
     let value = event.target.value;
@@ -65,7 +90,61 @@ export class ProductGridComponent {
     } else if (value == 'high_to_low') {
       this.products.sort((a: any, b: any) => parseFloat(b.price) - parseFloat(a.price));
     } else {
-      this.products = productlist;
+      this.products = this.productlist;
     }
   }
+
+  showDialog(id: any) {
+    this.removeIds = id
+    this.display = true;
+  }
+  deleteRecord() {
+    this.productlist.splice(this.removeIds, 1)
+    this.productService.deleteProduct(this.removeIds).subscribe(
+      (response) => {
+        console.log('Product deleted successfully:', response);
+        this.getAllProduct();
+        this.display = false;
+      },
+      (error) => {
+        console.error('Error deleting Product:', error);
+      }
+    );
+    this.display = false;
+  }
+
+
+
+  filterByCategory(category: any) {
+
+  this.filter=this.productlist.filter(product => product.categoryName === category.name);
+  }
+
+  getAllCategories() {
+    this.categoryService.getAllCategories().subscribe({
+      next: (response: any) => {
+        this.categories = response;
+      },
+      error: (error) => {
+        console.error('Error fetching categories:', error);
+      },
+    });
+  }
+
+
+  filterByPriceRange() {
+    this.filter = this.productlist.filter(product =>
+      product.price >= this.rangeValues[0] && product.price <= this.rangeValues[1]
+    );
+  }
+
+  handleChange(event: any) {
+    this.rangeValues = event.values;
+    this.range1=this.rangeValues[0];
+    this.range2=this.rangeValues[1];
+    console.log(event)
+    this.filterByPriceRange();
+  }
+
+
 }

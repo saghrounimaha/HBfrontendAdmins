@@ -1,5 +1,5 @@
-import { Component, Inject, OnInit } from '@angular/core';
 import { MAT_DIALOG_DATA } from '@angular/material/dialog';
+import { Component, OnInit, Inject } from '@angular/core';
 
 @Component({
   selector: 'app-update-product-item',
@@ -8,10 +8,9 @@ import { MAT_DIALOG_DATA } from '@angular/material/dialog';
 })
 export class UpdateProductItemComponent implements OnInit{
 
-  constructor(@Inject(MAT_DIALOG_DATA) public data: { item: any }) {}
 
   ngOnInit(): void {
-    console.log(this.data.item)
+    console.log("hi")
   }
 
 

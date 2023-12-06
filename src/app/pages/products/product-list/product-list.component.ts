@@ -1,7 +1,9 @@
-import { Component } from '@angular/core';
-
+import { Component, OnInit, ViewChild } from '@angular/core';
+import { Router } from '@angular/router';
+import { Table } from 'primeng/table';
+import { CategoryserviceService } from 'src/app/service/categoryservice.service';
 // Data Get
-import { productlist } from './data';
+import { ProductService } from 'src/app/service/productservice.service';
 
 @Component({
   selector: 'app-product-list',
@@ -13,6 +15,8 @@ import { productlist } from './data';
  * ProductList Component
  */
 export class ProductListComponent {
+  @ViewChild('dt', { static: false }) dt: Table | undefined;
+
 
   // bread crumb items
   breadCrumbItems!: Array<{}>;
@@ -25,9 +29,20 @@ export class ProductListComponent {
   coupenForm: any;
   display!: boolean;
   removeIds: any;
+  productlist:any[]=[];
+  categories: any[]= [];
+  filter: any[]= [];
+  sortDirection: 'asc' | 'desc' = 'asc';
+
+
+constructor(private productService:ProductService,private categoryService:CategoryserviceService,private router:Router){}
 
   ngOnInit(): void {
-    /**
+    this.getAllProduct();
+    this.getAllCategories();
+    this.filterByPriceRange();
+
+        /**
      * BreadCrumb
      */
     this.breadCrumbItems = [
@@ -39,7 +54,7 @@ export class ProductListComponent {
     this.range2 = '$ ' + this.rangeValues[1]
 
     // Fetch Data
-    this.products = productlist
+    this.products = this.productlist
   }
 
   // delete
@@ -48,12 +63,21 @@ export class ProductListComponent {
     this.display = true;
   }
 
+  getAllProduct() {
+    return this.productService.getAllProduct().subscribe({
+      next: (response: any) => {
+        this.productlist =this.filter= response;
+
+        console.log('Promotion fetched successfully:', response);
+      },
+      error: (error) => {
+        console.error('Error fetching promotion:', error);
+      },
+    });
+  }
 
   // Range Slider
-  handleChange(e: any) {
-    this.range1 = '$ ' + e.values[0]
-    this.range2 = '$ ' + e.values[1]
-  }
+
 
   // Pagination
   onPageChange(event: any) {
@@ -70,8 +94,56 @@ export class ProductListComponent {
 
   // Delete Record
   deleteRecord() {
-    this.products.splice(this.removeIds, 1)
+    this.productlist.splice(this.removeIds, 1)
+    this.productService.deleteProduct(this.removeIds).subscribe(
+      (response) => {
+        console.log('Product deleted successfully:', response);
+        this.getAllProduct()
+        this.display = false;
+      },
+      (error) => {
+        console.error('Error deleting Product:', error);
+      }
+    );
     this.display = false;
   }
+
+  filterByCategory(category: any) {
+
+  this.filter=this.productlist.filter(product => product.categoryName === category.name);
+  }
+
+  getAllCategories() {
+    this.categoryService.getAllCategories().subscribe({
+      next: (response: any) => {
+        this.categories = response;
+      },
+      error: (error) => {
+        console.error('Error fetching categories:', error);
+      },
+    });
+  }
+
+
+  filterByPriceRange() {
+    this.filter = this.productlist.filter(product =>
+      product.price >= this.rangeValues[0] && product.price <= this.rangeValues[1]
+    );
+  }
+
+  handleChange(event: any) {
+    this.rangeValues = event.values;
+    this.range1=this.rangeValues[0];
+    this.range2=this.rangeValues[1];
+    console.log(event)
+    this.filterByPriceRange();
+  }
+
+
+
+  // editProduct(productId:any){
+  //    this.router.navigate(['/products/product-create',{id:productId}]);
+  // }
+
 }
 

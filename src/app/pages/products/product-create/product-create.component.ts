@@ -1,9 +1,10 @@
+import { SlickCarouselComponent } from 'ngx-slick-carousel';
 import { events } from './../../extrapages/calendar/data';
 import { Variation } from './../../../models/variation.model';
 import { CategoryserviceService } from 'src/app/service/categoryservice.service';
-import { Component } from '@angular/core';
+import { Component, Renderer2 } from '@angular/core';
 import { FormArray, FormBuilder, FormControl, FormGroup, UntypedFormBuilder, UntypedFormGroup, Validators } from '@angular/forms';
-import { Router } from '@angular/router';
+import { ActivatedRoute, Router } from '@angular/router';
 import { Product } from 'src/app/models/product.model';
 import { ProductService } from 'src/app/service/productservice.service';
 import { VariationService } from 'src/app/service/variation.service';
@@ -11,6 +12,8 @@ import { VariationOptionService } from 'src/app/service/variation-option.service
 import { ToastrService } from 'ngx-toastr';
 import { MatDialog } from '@angular/material/dialog';
 import { UpdateProductItemComponent } from '../update-product-item/update-product-item.component';
+import { PormotionService } from 'src/app/service/pormotion.service';
+import { ProductItemService } from 'src/app/service/product-item.service';
 
 @Component({
   selector: 'app-product-create',
@@ -19,10 +22,14 @@ import { UpdateProductItemComponent } from '../update-product-item/update-produc
 })
 export class ProductCreateComponent {
   productForm!: UntypedFormGroup;
+  productItemForm!:UntypedFormGroup;
   product: Product = {
     name: "",
     description: '',
     dateCreated: '',
+    price:0,
+    sku:'',
+    quantityInStock:0,
     isApproved: false,
     category: null,
     reviews: null,
@@ -34,26 +41,40 @@ export class ProductCreateComponent {
   categories: any[] = [];
   Variations: any[] = []
   VariationsOption: any[] = []
+  promotionList:any[]=[]
+  productaded: any;
+
   text!: string
   // bread crumb items
   breadCrumbItems!: Array<{}>;
   formGroup!: FormGroup;
-
   tableForm!: FormGroup;
+  editableModel!: boolean;
+  removeIds: any;
+  display!: boolean;
+
 
   constructor(private router: Router, private formBuilder: UntypedFormBuilder, private fb: FormBuilder,
     private productService: ProductService, private categoryService: CategoryserviceService
     , private variationService: VariationService,
     private variationOptionService: VariationOptionService,
     private dialog: MatDialog ,
-    private toastr:ToastrService
+    private toastr:ToastrService,
+    private route:ActivatedRoute,
+    private promotionService:PormotionService,
+    private productItemService:ProductItemService,
+    private renderer: Renderer2
     ) {
 
   }
   ngOnInit(): void {
 
-    this.getAllCategories()
-    this.getAllVariations()
+    this.getAllCategories();
+    this.getAllVariations();
+    this.getAllPromotion();
+
+
+
    // this.addForm()
     /**
      * BreadCrumb
@@ -74,64 +95,66 @@ export class ProductCreateComponent {
       name: ['', Validators.required],
       description: ['', Validators.required],
       images: [null],
-      namecategory: [null, Validators.required],
+      category: [null, Validators.required],
       price: ['', Validators.required],
       sku: ['', Validators.required],
       quantityInStock: ['', Validators.required],
-      variation: [null, Validators.required],
+      dateProduction: [null, Validators.required],
 
     });
 
     console.log(this.productForm)
-
+    this.productItemForm = this.formBuilder.group({
+      price: ['', Validators.required],
+      sku: ['', Validators.required],
+      quantity: ['', Validators.required],
+    });
 
   }
 
-  images: File | null = null;
+  // images: File | null = null;
 
-  onFileSelected(event: any): void {
-    const fileInput = event.target.files[0];
-    console.log(fileInput);
+  // onFileSelected(event: any): void {
+  //   const fileInput = event.target.files[0];
+  //   console.log(fileInput);
 
-    if (fileInput) {
-      this.images = fileInput;
-    }
-  }
+  //   if (fileInput) {
+  //     this.images = fileInput;
+  //   }
+  // }
 
   createProduct(): void {
     console.log(this.productForm)
 
 
     const newProduct = {
-      category: {
-        id_category: this.productForm.value.namecategory,
-
-      },
-      productItems: [{
-        SKU: this.productForm.value.sku,
-        price: this.productForm.value.price,
-        quantityInStock: this.productForm.value.quantityInStock,
-      }],
-      variation: {
-        id: this.productForm.value.variation
-      },
-      variationoption: {}
-
+     name:this.productForm.value.name,
+     description:this.productForm.value.description,
+     ShortDescription:this.productForm.value.shortDescription,
+      quantityInStock:this.productForm.value.quantityInStock,
+     price:this.productForm.value.price,
+      dateProduction:this.productForm.value.dateProduction,
+     sku:this.productForm.value.sku,
+     productItems:this.formatTable(this.productItems)
     };
+console.log(newProduct)
 
+    this.productService.addProduct(newProduct,this.productForm.value.category).subscribe({
+      next: (response: any) => {
+         this.productaded=response
+        console.log('Product created successfully:', response);
+        this.toastr.success("Product Created successfully!! ")
 
-    // this.productService.addProduct(this.product).subscribe({
-    //   next: (response: any) => {
-    //     console.log('Product created successfully:', response);
-    //     this.productForm.reset();
-    //     this.toastr.success("Product Created successfully!! ")
+        this.AddImage(this.productaded.id_product);
 
-    //     //this.images = null;
-    //   },
-    //   error: (error) => {
-    //     console.error('Error creating product:', error);
-    //   },
-    // });
+        this.productForm.reset();
+        this.router.navigate(['/products/product-grid']);
+
+      },
+      error: (error) => {
+        console.error('Error creating product:', error);
+      },
+    });
   }
 
 
@@ -264,7 +287,6 @@ export class ProductCreateComponent {
   }
 
   addForm(obj:any) {
-    // Add a new form group to the form array
     const newItemFormGroup = this.fb.group({
       options:[''],
       sku: [''],
@@ -282,17 +304,52 @@ export class ProductCreateComponent {
 
   }
 
+  openDialog() {
+   this.dialog.open (UpdateProductItemComponent,{width:"500px"});
+  }
 
-  openDialog(item: any) {
-    const dialogRef = this.dialog.open(UpdateProductItemComponent, {
-      width: '400px',
-      data: { item: item }
-    });
 
-    dialogRef.afterClosed().subscribe(result => {
-      // Traiter le résultat si nécessaire après la fermeture de la boîte de dialogue
-      console.log('Boîte de dialogue fermée avec résultat :', result);
+
+  getAllPromotion() {
+    return this.promotionService.getAllPromotion().subscribe({
+      next: (response: any) => {
+        this.promotionList = response;
+      },
+      error: (error) => {
+        console.error('Error fetching promotion:', error);
+      },
     });
+  }
+
+
+
+
+  //updateproductitem
+  showDialog(id: any) {
+    this.removeIds = id
+    this.display = true;
+  }
+
+  // modal
+  showPositionDialog() {
+    this.editableModel = true;
+  }
+  editProductItem(productItem: any) {
+    this.selectedProductItem=productItem;
+    console.log(productItem);
+    console.log('Form before setting values:', this.productForm.value);
+    this.editableModel = true;
+    setTimeout(() => {
+      var modelTitle = document.querySelector('.modal-title') as HTMLDivElement;
+      modelTitle.innerHTML = 'Update Promotion';
+      var updateBtn = document.getElementById('add-btn') as HTMLDivElement;
+      updateBtn.innerHTML = 'Update Promotion';
+    }, 0);
+
+    this.productItemForm.controls['price'].setValue(productItem.price);
+    this.productItemForm.controls['quantity'].setValue(productItem.quantity);
+    this.productItemForm.controls['sku'].setValue(productItem.sku);
+
   }
 
 
@@ -302,21 +359,75 @@ export class ProductCreateComponent {
 
 
 
+  deleteRecord() {
+    this.productItems.splice(this.removeIds, 1)
+    this.display = false;
+  }
+
+  selectedProductItem:any
+   updateProductItem(){
+    if(this.productItemForm.valid){
+      this.selectedProductItem.sku=this.productItemForm.value.sku
+      this.selectedProductItem.price=this.productItemForm.value.price
+      this.selectedProductItem.quantity=this.productItemForm.value.quantity
+      this.productItems.forEach((item:any)=>{
+         if(this.areArraysEqual(item.options,this.selectedProductItem.options)){
+            item.sku=this.selectedProductItem.sku
+            item.price=this.selectedProductItem.price
+            item.quantity=this.selectedProductItem.quantity
+            return;
+         }
+
+      })
+      this.editableModel = false;
+
+    }
 
 
+   }
 
-  files: File[] = [];
+   areArraysEqual(arr1: any[], arr2: any[]): boolean {
+    if (arr1.length !== arr2.length) {
+      return false;
+    }
+    for (let i = 0; i < arr1.length; i++) {
+      if (arr1[i] !== arr2[i]) {
+        return false;
+      }
+    }
+    return true;
+  }
+
+
+  images: File[] = [];
   onSelect(event: any) {
     console.log(event);
-    this.files.push(...event.addedFiles);
+    this.images.push(...event.addedFiles);
   }
 
   onRemove(event: any) {
     console.log(event);
-    this.files.splice(this.files.indexOf(event), 1);
+    this.images.splice(this.images.indexOf(event), 1);
   }
+  AddImage(productId: number): void {
+    if (this.images && this.images.length > 0) {
+      const formData = new FormData();
 
+      for (let i = 0; i < this.images.length; i++) {
+        formData.append('images', this.images[i]);
+      }
 
-
+      this.productService.addimageproduct(productId, formData).subscribe(
+        response => {
+          console.log('Images added successfully:', response);
+        },
+        error => {
+          console.error('Error adding images:', error);
+        }
+      );
+    } else {
+      console.error('No images selected');
+    }
+  }
 
 }

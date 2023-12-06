@@ -8,6 +8,7 @@ import { ProductOverviewComponent } from './product-overview/product-overview.co
 import {  VariationComponent } from './variation/variation.component';
 import { VariationOptionComponent } from './variationOption/variationOption.component';
 import { PromotionsComponent } from './promotions/PromotionsComponent';
+import { ProductUpdateComponent } from './product-update/product-update.component';
 
 const routes: Routes = [
   {
@@ -19,7 +20,7 @@ const routes: Routes = [
     component: ProductGridComponent
   },
   {
-    path: 'product-overview',
+    path: 'product-overview/:id',
     component: ProductOverviewComponent
   },
   {
@@ -41,6 +42,10 @@ const routes: Routes = [
 {
 path: 'promotion',
 component: PromotionsComponent
+},
+{
+  path: 'product-update/:id',
+  component: ProductUpdateComponent,
 },
 ];
 

@@ -4,6 +4,9 @@ export interface Product {
   name: string ;
   description: string ;
   dateCreated: string ;
+  price:number;
+  quantityInStock:number;
+  sku:string;
   isApproved: boolean ;
   category: any;
   reviews: any;

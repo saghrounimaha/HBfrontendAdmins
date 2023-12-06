@@ -7,7 +7,7 @@
                 <img src="assets/images/logo-sm.png" alt="" height="22">
             </span>
             <span class="logo-lg">
-                <img src="assets/images/logo-dark.png" alt="" height="17">
+                <img src="assets/images/Logo-holistic-babe.png" alt="" height="60">
             </span>
         </a>
         <!-- Light Logo-->
@@ -15,7 +15,7 @@
             <span class="logo-sm">
                 <img src="assets/images/logo-sm.png" alt="" height="22">
             </span>
-            <span class="logo-lg"> 
+            <span class="logo-lg">
                 <img src="assets/images/logo-light.png" alt="" height="17">
             </span>
         </a>
@@ -31,7 +31,7 @@
             <ul class="navbar-nav" id="navbar-nav">
                 <ng-container *ngFor="let item of menuItems">
                     <li class="menu-title" *ngIf="item.isTitle"><span data-key="t-menu">{{ item.label | translate }}</span></li>
-      
+
                     <li class="nav-item" *ngIf="!item.isTitle && !item.isLayout">
                       <a *ngIf="hasItems(item)" href="javascript:void(0);" class="is-parent nav-link menu-link"
                         [ngClass]="{'has-arrow': !item.badge, 'has-dropdown': item.badge}" data-bs-toggle="collapse" aria-expanded="false" (click)="toggleItem($event)">
@@ -40,7 +40,7 @@
                         <span class="badge badge-pill {{item.badge.variant}}" *ngIf="item.badge">{{item.badge.text
                           | translate}}</span>
                       </a>
-      
+
                       <a [routerLink]="item.link" *ngIf="!hasItems(item)" class="side-nav-link-ref nav-link menu-link 123">
                         <i class="bx {{ item.icon }} icon nav-icon" *ngIf="item.icon" class=""></i>
                         <span class=""> {{ item.label | translate }}</span>

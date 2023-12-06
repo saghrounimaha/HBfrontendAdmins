@@ -4,6 +4,8 @@ import { Variation } from './../../../models/variation.model';
 import { VariationService } from 'src/app/service/variation.service';
 import { Component, OnInit } from '@angular/core';
 import { UntypedFormBuilder, UntypedFormGroup, Validators } from '@angular/forms';
+import { MatDialog } from '@angular/material/dialog';
+import { UpdateProductItemComponent } from '../update-product-item/update-product-item.component';
 
 // Data Get
 
@@ -31,7 +33,8 @@ export class VariationComponent {
   removeIds: any;
   display!: boolean;
 
-  constructor(private formBuilder: UntypedFormBuilder, private variationService: VariationService) { }
+  constructor(private formBuilder: UntypedFormBuilder, private variationService: VariationService ,private dialog: MatDialog ,
+    ) { }
 
   ngOnInit(): void {
 
@@ -178,5 +181,8 @@ updateVariation(id: number, updatedVariation: Variation): void {
         variation.name.toLowerCase().includes(this.searchTerm.toLowerCase())
       );
     }
+  }
+  opendialog(){
+    this.dialog.open(UpdateProductItemComponent)
   }
 }

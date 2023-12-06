@@ -33,12 +33,7 @@ export const MENU: MenuItem[] = [
         link: '/products/product-grid',
         parentId: 3
       },
-      {
-        id: 6,
-        label: 'MENUITEMS.PRODUCTS.LIST.OVERVIEW',
-        link: '/products/product-overview',
-        parentId: 3,
-      },
+
       {
         id: 7,
         label: 'MENUITEMS.PRODUCTS.LIST.CREATEPRODUCT',

@@ -18,6 +18,9 @@ import { SharedModule } from '../shared/shared.module';
     PagesRoutingModule,
     SharedModule,
   ],
+  exports:[
+
+  ]
 })
 export class PagesModule {
   constructor() {

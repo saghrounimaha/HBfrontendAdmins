@@ -2,19 +2,44 @@ import { NgModule } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 
+// calener
+import { FullCalendarModule } from '@fullcalendar/angular';
+
+// Countup
+import { CountUpModule } from 'ngx-countup';
+
+// dialog
+import { DialogModule } from 'primeng/dialog';
+// icon
+import lottie from 'lottie-web';
+import { defineElement } from 'lord-icon-element';
+// table
 import { TableModule } from 'primeng/table';
+// sidebar
+import { SidebarModule } from 'primeng/sidebar';
+// paginator
+import { PaginatorModule } from 'primeng/paginator';
+// tabview
+import { TabViewModule } from "primeng/tabview";
+// scrollpanel
+import { ScrollPanelModule } from 'primeng/scrollpanel';
+// carrosel
+import { GalleriaModule } from 'primeng/galleria';
+// overlaypanel
+import { OverlayPanelModule } from 'primeng/overlaypanel';
+
+// dataview
+import { DataViewModule } from 'primeng/dataview';
+
+// calender picker
+
 import { AccordionModule } from 'primeng/accordion';
 import { SliderModule } from 'primeng/slider';
-import { DataViewModule } from 'primeng/dataview';
-import { GalleriaModule } from 'primeng/galleria';
 import { FileUploadModule } from 'primeng/fileupload';
 import { HttpClientModule } from '@angular/common/http';
 import { ChipsModule } from 'primeng/chips';
-import { OverlayPanelModule } from 'primeng/overlaypanel';
-import { DialogModule } from 'primeng/dialog';
 import { EditorModule } from 'primeng/editor';
 import { TooltipModule } from 'primeng/tooltip';
-import { PaginatorModule } from 'primeng/paginator';
 // Swiper Slider
 
 import { SlickCarouselModule } from 'ngx-slick-carousel';
@@ -36,6 +61,20 @@ import { MatButtonModule } from '@angular/material/button';
 import {MatIconModule} from '@angular/material/icon';
 import{MatFormFieldModule}from '@angular/material/form-field';
 import { MatDialogModule } from '@angular/material/dialog';
+import { PromotionsComponent } from './promotions/PromotionsComponent';
+import { ExtrapagesModule } from '../extrapages/extrapages.module';
+import { ExtrapagesRoutingModule } from '../extrapages/extrapages-routing.module';
+import { NgApexchartsModule } from 'ng-apexcharts';
+import { CalendarModule } from 'primeng/calendar';
+import { NgxMasonryModule } from 'ngx-masonry';
+import { MaterialModule } from 'src/app/shared/material/material.module';
+import { ProductUpdateComponent } from './product-update/product-update.component';
+
+
+
+
+
+
 
 @NgModule({
   declarations: [
@@ -46,13 +85,18 @@ import { MatDialogModule } from '@angular/material/dialog';
     CategoriesComponent,
     VariationComponent,
     VariationOptionComponent,
-    UpdateProductItemComponent
+    UpdateProductItemComponent,
+    PromotionsComponent,
+    ProductUpdateComponent
+
   ],
   imports: [
+    TableModule,
+    MaterialModule,
+    ExtrapagesModule,
     MatButtonModule,
     MatIconModule,
     MatFormFieldModule,
-    MatDialogModule,
     NgxDropzoneModule,
     CommonModule,
     SharedModule,
@@ -73,8 +117,28 @@ import { MatDialogModule } from '@angular/material/dialog';
     PaginatorModule,
     SlickCarouselModule,
     TooltipModule,
-    ReactiveFormsModule
+    ReactiveFormsModule,
 
+
+    ExtrapagesRoutingModule,
+    FullCalendarModule,
+    CountUpModule,
+    SidebarModule,
+    TabViewModule,
+    NgApexchartsModule,
+    ScrollPanelModule,
+    CalendarModule,
+    NgxMasonryModule,
+
+
+
+  ],
+   exports:[
+    DialogModule,
   ]
 })
-export class ProductsModule { }
+export class ProductsModule {
+  constructor() {
+    defineElement(lottie.loadAnimation);
+  }
+ }

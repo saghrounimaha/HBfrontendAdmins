@@ -60,7 +60,6 @@ getAllVariationOption(){
   return  this.variationOptionService.getAllVarition().subscribe(
     (response :any) => {
       this.Variations = response;
-      this.filteredVariations = response;
       console.log(response)
     },
     (error) => {
@@ -195,13 +194,4 @@ updateVariation(id: number, updatedVariation: VariationOption): void {
     this.display = true;
   }
 
-  filterVariations() {
-    if (this.searchTerm.trim() === '') {
-      this.filteredVariations = [...this.Variations];
-    } else {
-      this.filteredVariations = this.Variations.filter(variation =>
-        variation.value.toLowerCase().includes(this.searchTerm.toLowerCase())
-      );
-    }
-  }
 }

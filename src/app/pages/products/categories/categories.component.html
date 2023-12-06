@@ -101,6 +101,7 @@
                 <li><a href="javascript:void(0);" class="text-muted">{{data?.description}}</a></li>
               </ul>
               <img [src]="data?.image?.url" alt="" class="img-fluid category-img object-fit-cover">
+
             </div>
           </div>
         </div>
@@ -132,8 +133,7 @@
                 <li *ngIf="data?.name"><a href="javascript:void(0);" class="text-muted">{{data?.name}}</a></li>
                 <li><a href="javascript:void(0);" class="text-muted">{{data?.description}}</a></li>
               </ul>
-
-              <img [src]="data?.image?.url" class="img-fluid category-img object-fit-cover">
+              <img [src]="data?.image?.url" alt="" class="img-fluid category-img object-fit-cover">
             </div>
           </div>
         </div>
